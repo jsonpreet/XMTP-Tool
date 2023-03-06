@@ -20,10 +20,14 @@ interface XmtpState {
   sendingMessage:  Array<any>;
   setSendingMessage: (sendingMessage: Array<any>) => void;
   addSendingMessage: (address: String) => void;
+  message: string;
+  setMessage: (message: string) => void;
 }
 
 export const useXmtpStore = create<XmtpState>((set) => ({
+  message: "",
   isLoggedIn: false,
+  setMessage: (message: string) => set(() => ({ message })),
   sendingMessage: [],
   setIsLoggedIn: (isLoggedIn: boolean) => set(() => ({ isLoggedIn })),
   setSendingMessage: (message: Array<any>) => set((state) => ({ sendingMessage: [...state.sendingMessage, ...message] })),

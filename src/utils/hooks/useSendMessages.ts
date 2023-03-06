@@ -6,12 +6,12 @@ import { buildLocalStorageKey } from '../functions/getKeys';
 import { useXmtpStore } from '@/store/xmtp';
 
 const useSendMessages = (client:any, user: string) => {
-    const [failed, setFailed] = useState<any>([]);
-    const [success, setSuccess] = useState<any>([]);
-    const [sending, setSending] = useState(true);
-    const setSendingMessage = useXmtpStore((state) => state.setSendingMessage);
-    const addSendingMessage = useXmtpStore((state) => state.addSendingMessage);
-    const message = 'Hello World!'
+    const [failed, setFailed] = useState<any>([])
+    const [success, setSuccess] = useState<any>([])
+    const [sending, setSending] = useState(true)
+    const setSendingMessage = useXmtpStore((state) => state.setSendingMessage)
+    const addSendingMessage = useXmtpStore((state) => state.addSendingMessage)
+    const message = useXmtpStore((state) => state.message)
 
     const sendMessages = useCallback(
         async (addresses: Array<any>) => {
