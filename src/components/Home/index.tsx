@@ -74,9 +74,8 @@ const Home: NextPage = () => {
                         <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
                             <div className='mx-auto w-full max-w-3xl'>
                                 <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
-                                    <label>Enter Message</label>
                                     <textarea
-                                        className='w-full text-black h-40 p-2 rounded'
+                                        className='border theme-border h-52 theme-bg focus:shadow-[0_0_50px_10px_rgba(255,255,255,0.04)] rounded w-full focus:ring-1 focus:ring-border-3 focus:outline-none transition duration-200 ease-in-out px-4 py-2 text-white'
                                         placeholder='Enter Message'
                                         value={message}
                                         onChange={(e) => setMessage(e.target.value)}
@@ -85,13 +84,13 @@ const Home: NextPage = () => {
                             </div>
                             <div className='flex space-x-5'>
                                 <button
-                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                    className="border theme-border hover:bg-red-500 text-white py-2 px-6 rounded-full"
                                     onClick={onStart}
                                 >
-                                    {sending ? <span className='text-white font-bold'>Sending...</span> : <span className='text-white font-bold'>Send Message</span>}
+                                    {sending ? <span>Sending...</span> : <span>Send Message</span>}
                                 </button>
                                 <button
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    className="border theme-border hover:bg-blue-500 text-white py-2 px-6 rounded-full ring-0"
                                     onClick={() => inputRef.current?.click()}
                                 >
                                     Select CSV
@@ -103,10 +102,10 @@ const Home: NextPage = () => {
                         <div className='flex justify-center mx-auto flex-col'>
                             <h2 className='text-xl font-bold mb-5 text-white'>Upload CSV File</h2>
                             <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                className="border theme-border hover:bg-blue-500 text-white py-2 px-6 rounded-full"
                                 onClick={() => inputRef.current?.click()}
                             >
-                                Select CSV
+                                Select
                             </button>
                             {isUploaded && <span>Total <span className='text-blue-300 font-bold'>{data?.length}</span> Address found!</span>}
                         </div>
@@ -119,7 +118,7 @@ const Home: NextPage = () => {
                                 {sendingMessage.map((elem: any, index: number) => (
                                     <div key={index} className="flex space-x-5 items-center justify-center w-full flex-1 px-20 text-center">
                                         <span className='text-white font-bold'>{elem}</span>
-                                        <span className='text-green-300 font-bold'>Sent</span>
+                                        <span className='text-green-100 text-sm px-3 py-1 rounded-full bg-green-600'>Sent</span>
                                     </div>
                                 ))}
                             </div>

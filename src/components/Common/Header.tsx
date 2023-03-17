@@ -22,14 +22,14 @@ function Header() {
 
     return (
         <>
-            <div className="w-full relative py-4 px-8">
+            <div className="w-full relative py-4 px-8 border-b theme-border">
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
-                        <h1 className="text-2xl font-bold text-white ml-2">XMTP</h1>
+                        <h1 className="text-3xl font-black text-white ml-2">XMTP</h1>
                     </div>
                     {isLoggedIn ?
                         <button
-                            className="px-6 py-2 rounded-full bg-purple-600 text-white hover:bg-purple-700"
+                            className="px-6 py-2 rounded-full bg-orange-600 text-white hover:bg-orange-700"
                             onClick={() => {
                                 disconnect()
                             }}
