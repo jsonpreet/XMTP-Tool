@@ -50,6 +50,10 @@ const Login:FC = () => {
     return (
         <>
             <div className="w-full h-screen flex flex-col items-center justify-center">
+                <div className="flex items-center mb-10 border rounded-full px-5 theme-border py-3">
+                    <h1 className="text-5xl font-black text-white ml-2">XMTP</h1>
+                    <span className='mt-6 font-semibold text-gray-400 ml-2'>Broadcast tool</span>
+                </div>
                 <div>
                     <h3 className="text-3xl flex flex-col space-y-2 text-center items-center justify-center font-semibold mb-10">
                         <span>Send <span className="bg-gradient-to-r bg-clip-text  text-transparent  from-indigo-500 via-purple-500 to-indigo-500 animate-text">Message</span> to</span> 
