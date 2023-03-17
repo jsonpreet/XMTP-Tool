@@ -8,7 +8,7 @@ export const ENVIRONMENT = {
   DEMO: "demo",
 }
 
-export const IS_MAINNET = 'testnet'
+export const IS_MAINNET = process.env.NEXT_PUBLIC_XMTP_ENVIRONMENT === 'production'
 
 // XMTP
 export const XMTP_ENV = IS_MAINNET ? 'production' : 'dev'
