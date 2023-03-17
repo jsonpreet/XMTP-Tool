@@ -17,6 +17,8 @@ interface XmtpState {
   userSigner?: any;
   setUserSigner: (userSigner?: any) => void;
   resetXmtpState: () => void;
+  sending: boolean;
+  setSending: (sending: boolean) => void;
   sendingMessage:  Array<any>;
   setSendingMessage: (sendingMessage: Array<any>) => void;
   addSendingMessage: (address: String) => void;
@@ -27,6 +29,8 @@ interface XmtpState {
 export const useXmtpStore = create<XmtpState>((set) => ({
   message: "",
   isLoggedIn: false,
+  sending: false,
+  setSending: (sending: boolean) => set(() => ({ sending })),
   setMessage: (message: string) => set(() => ({ message })),
   sendingMessage: [],
   setIsLoggedIn: (isLoggedIn: boolean) => set(() => ({ isLoggedIn })),
@@ -39,8 +43,7 @@ export const useXmtpStore = create<XmtpState>((set) => ({
   client: undefined,
   setClient: (client: Client | undefined | null) => set(() => ({ client })),
   recipientWalletAddress: "",
-  setRecipientWalletAddress: (address) =>
-    set(() => ({ recipientWalletAddress: address })),
+  setRecipientWalletAddress: (address) => set(() => ({ recipientWalletAddress: address })),
   conversationId: "",
   setConversationId: (conversationId) => set(() => ({ conversationId })),
   resetXmtpState: () =>

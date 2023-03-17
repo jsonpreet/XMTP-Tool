@@ -4,18 +4,20 @@ import { XMTP_ENV } from '../constants';
 import { Client } from '@xmtp/xmtp-js';
 import { buildLocalStorageKey } from '../functions/getKeys';
 import { useXmtpStore } from '@/store/xmtp';
+import { toast } from 'react-hot-toast';
 
 const useSendMessages = (client:any, user: string) => {
-    const [failed, setFailed] = useState<any>([])
-    const [success, setSuccess] = useState<any>([])
-    const [sending, setSending] = useState(true)
-    const setSendingMessage = useXmtpStore((state) => state.setSendingMessage)
     const addSendingMessage = useXmtpStore((state) => state.addSendingMessage)
-    const message = useXmtpStore((state) => state.message)
+    const setSending = useXmtpStore((state) => state.setSending)
+    //const message = useXmtpStore((state) => state.message)
 
     const sendMessages = useCallback(
-        async (addresses: Array<any>) => {
+        async (addresses: Array<any>, message: string) => {
             if (!client) {
+                return;
+            }
+            if (!message) {
+                toast.error('Please enter a message to send')
                 return;
             }
             setSending(true)
@@ -25,22 +27,20 @@ const useSendMessages = (client:any, user: string) => {
                 const conversationKey = buildLocalStorageKey(address[0]);
                 const selectedConversation = await createNewConversation(client, address[0], conversationKey);
                 let success: Array<any> = [];
+                let failed: Array<any> = [];
                 try {
-                    //setSuccess([...success, address[0]]);
                     success = [...success, address[0]];
-                    //setSendingMessage([address[0], message])
-                    //addSendingMessage([address[0], message])
-                    const resp = await selectedConversation?.send(`${message} - ${address[0]}`);
+                    const resp = await selectedConversation?.send(message);
                     if (resp) {
                         addSendingMessage(address[0])
                     }
                 } catch (error) {
                     console.log('error', error);
-                    setFailed([...failed, address[0]]);
+                    failed = [...failed, address[0]];
                 } finally {
                     setSending(false)
                 }
-                    return { success, failed };
+                return { success, failed };
             })
             return Promise.all(output);
             // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -50,7 +50,6 @@ const useSendMessages = (client:any, user: string) => {
     const createNewConversation = async (client: any, address: string, conversationKey: string) => {
         const canMessage = await Client.canMessage(address, { env: XMTP_ENV });
         if (!canMessage) {
-            setFailed([...failed, address[0]]);
             return;
         }
         const conversation = await client.conversations.newConversation(address);

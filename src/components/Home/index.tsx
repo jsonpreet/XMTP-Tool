@@ -1,15 +1,16 @@
 import { useXmtpStore } from '@/store/xmtp'
 import { NextPage } from 'next'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Login from '@/components/Common/Login'
 import CSVReader from 'react-csv-reader'
 import { IFileInfo } from 'react-csv-reader'
 import useSendMessages from '@/utils/hooks/useSendMessages'
 import useInitXmtpClient from '@/utils/hooks/useXmtpClient'
-import { useAccount } from 'wagmi'
+import { toast } from 'react-hot-toast'
 
 const Home: NextPage = () => {
     const { client } = useInitXmtpClient();
+    const [message, setMessage] = useState<string>('')
     const isLoggedIn = useXmtpStore(state => state.isLoggedIn)
     const user = useXmtpStore(state => state.user)
     const inputRef = React.useRef<HTMLInputElement>(null)
@@ -20,8 +21,7 @@ const Home: NextPage = () => {
     const setIsLoggedIn = useXmtpStore(state => state.setIsLoggedIn)
     const sendingMessage = useXmtpStore(state => state.sendingMessage)
     const [response, setResponse] = React.useState<any>(null)
-    const message = useXmtpStore((state) => state.message)
-    const setMessage = useXmtpStore((state) => state.setMessage)
+    const sending = useXmtpStore((state) => state.sending)
 
     useEffect(() => {
         if (isLoggedIn && !client) {
@@ -59,7 +59,10 @@ const Home: NextPage = () => {
             return
         }
         
-        const response = await sendMessages(data)
+        const response = await sendMessages(data, message)
+        if (!response) {
+            toast.error('Something went wrong')
+        }
         setResponse(response)
 
         console.log(sendingMessage)
@@ -76,10 +79,9 @@ const Home: NextPage = () => {
     return (
         <>
             <div className="flex flex-col py-20">
-                <main className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
+                <div className="flex space-x-5 items-start justify-start w-full flex-1 px-20 text-center">
                     {data && data.length > 0 ? (
                         <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
-                            <h2 className='text-xl font-bold mb-5 text-white'>Preview</h2>
                             <div className='mx-auto w-full max-w-3xl'>
                                 <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
                                     <label>Enter Message</label>
@@ -95,12 +97,12 @@ const Home: NextPage = () => {
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 onClick={onStart}
                             >
-                                Start Sending Messages 
+                                Start Sending Messages {sending && <span className='text-white font-bold'>Sending...</span>}
                             </button>
                             <span>Total <span className='text-blue-300 font-bold'>{data?.length}</span> Address found!</span>
                         </div>
                     ) : ( 
-                        <>
+                        <div className='flex justify-center mx-auto flex-col'>
                             <h2 className='text-xl font-bold mb-5 text-white'>Upload CSV File</h2>
                             <CSVReader
                                 inputRef={inputRef}
@@ -117,10 +119,10 @@ const Home: NextPage = () => {
                                 Select CSV
                             </button>
                             {isUploaded && <span>Total <span className='text-blue-300 font-bold'>{data?.length}</span> Address found!</span>}
-                        </>
+                        </div>
                     )}
                     {sendingMessage && sendingMessage.length > 0 && (
-                        <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 py-20 text-center">
+                        <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 text-center">
                             <h2 className='text-xl font-bold text-white'>Status</h2>
                             {/* <span>Total <span className='text-blue-300 font-bold'>{sendingMessage?.length}</span> Address found!</span> */}
                             <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
@@ -133,7 +135,7 @@ const Home: NextPage = () => {
                             </div>
                         </div>
                     )} 
-                </main>
+                </div>
             </div>
         </>
     )
