@@ -26,6 +26,7 @@ function Header() {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <h1 className="text-3xl font-black text-white ml-2">XMTP</h1>
+                        <span className='mt-2.5 font-semibold text-gray-400 ml-2'>Broadcast tool</span>
                     </div>
                     {isLoggedIn ?
                         <button
