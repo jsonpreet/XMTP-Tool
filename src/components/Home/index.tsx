@@ -7,6 +7,7 @@ import { IFileInfo } from 'react-csv-reader'
 import useSendMessages from '@/utils/hooks/useSendMessages'
 import useInitXmtpClient from '@/utils/hooks/useXmtpClient'
 import { toast } from 'react-hot-toast'
+import { isValidRecipientAddressFormat } from '@/utils/functions'
 
 const Home: NextPage = () => {
     const { client } = useInitXmtpClient();
@@ -35,19 +36,9 @@ const Home: NextPage = () => {
         return <Login/>
     }
 
-    const papaparseOptions = {
-        header: true,
-        dynamicTyping: true,
-        skipEmptyLines: true,
-        transformHeader: (header: string) =>
-        header
-            .toLowerCase()
-            .replace(/\W/g, '_')
-    }
-
     const handleForce = (data: Array<any>, fileInfo: IFileInfo, originalFile?: File) => {
         setIsUploaded(true)
-        setData(data.filter(elem => elem != ""))
+        setData(data.filter(elem => elem != "" && elem != null && isValidRecipientAddressFormat(elem[0])))
     }
 
     const handleDarkSideForce = (err: any) => {
@@ -64,20 +55,19 @@ const Home: NextPage = () => {
             toast.error('Something went wrong')
         }
         setResponse(response)
-
-        console.log(sendingMessage)
-        // if (!currentProfile) {
-        // return;
-        // }
-        // const conversationId = buildConversationId(currentProfile.id, profile.id);
-        // const conversationKey = buildConversationKey(profile.ownedBy, conversationId);
-        // addProfileAndSelectTab(conversationKey, profile);
-        // router.push(`/messages/${conversationKey}`);
     };
 
 
     return (
         <>
+            <CSVReader
+                inputRef={inputRef}
+                cssClass="hidden opacity-0"
+                label="Select CSV"
+                onFileLoaded={handleForce}
+                onError={handleDarkSideForce}
+                // parserOptions={papaparseOptions}
+            />
             <div className="flex flex-col py-20">
                 <div className="flex space-x-5 items-start justify-start w-full flex-1 px-20 text-center">
                     {data && data.length > 0 ? (
@@ -93,25 +83,25 @@ const Home: NextPage = () => {
                                     />
                                 </div>
                             </div>
-                            <button
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                onClick={onStart}
-                            >
-                                Start Sending Messages {sending && <span className='text-white font-bold'>Sending...</span>}
-                            </button>
+                            <div className='flex space-x-5'>
+                                <button
+                                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                                    onClick={onStart}
+                                >
+                                    {sending ? <span className='text-white font-bold'>Sending...</span> : <span className='text-white font-bold'>Send Message</span>}
+                                </button>
+                                <button
+                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    onClick={() => inputRef.current?.click()}
+                                >
+                                    Select CSV
+                                </button>
+                            </div>
                             <span>Total <span className='text-blue-300 font-bold'>{data?.length}</span> Address found!</span>
                         </div>
                     ) : ( 
                         <div className='flex justify-center mx-auto flex-col'>
                             <h2 className='text-xl font-bold mb-5 text-white'>Upload CSV File</h2>
-                            <CSVReader
-                                inputRef={inputRef}
-                                cssClass="hidden opacity-0"
-                                label="Select CSV"
-                                onFileLoaded={handleForce}
-                                onError={handleDarkSideForce}
-                                // parserOptions={papaparseOptions}
-                            />
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 onClick={() => inputRef.current?.click()}

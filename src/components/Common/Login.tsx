@@ -1,5 +1,4 @@
 import { useXmtpStore } from "@/store/xmtp";
-import useInitXmtpClient from "@/utils/hooks/useXmtpClient";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
