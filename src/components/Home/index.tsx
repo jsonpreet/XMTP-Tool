@@ -7,7 +7,7 @@ import { IFileInfo } from 'react-csv-reader'
 import useSendMessages from '@/utils/hooks/useSendMessages'
 import useInitXmtpClient from '@/utils/hooks/useXmtpClient'
 import { toast } from 'react-hot-toast'
-import { isValidRecipientAddressFormat } from '@/utils/functions'
+import { isValidRecipientAddressFormat, shortAddress } from '@/utils/functions'
 
 const Home: NextPage = () => {
     const { client } = useInitXmtpClient();
@@ -69,11 +69,11 @@ const Home: NextPage = () => {
                 // parserOptions={papaparseOptions}
             />
             <div className="flex flex-col py-20">
-                <div className="flex space-x-5 items-start justify-start w-full flex-1 px-20 text-center">
+                <div className="flex flex-col md:flex-row space-x-0 space-y-5 md:space-y-0 md:space-x-5 items-start justify-start w-full flex-1 px-8 md:px-20 text-center">
                     {data && data.length > 0 ? (
-                        <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
+                        <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 md:px-20 text-center">
                             <div className='mx-auto w-full max-w-3xl'>
-                                <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
+                                <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 md:px-20 text-center">
                                     <textarea
                                         className='border theme-border h-52 theme-bg focus:shadow-[0_0_50px_10px_rgba(255,255,255,0.04)] rounded w-full focus:ring-1 focus:ring-border-3 focus:outline-none transition duration-200 ease-in-out px-4 py-2 text-white'
                                         placeholder='Enter Message'
@@ -113,11 +113,11 @@ const Home: NextPage = () => {
                     {sendingMessage && sendingMessage.length > 0 && (
                         <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 text-center">
                             <h2 className='text-xl font-bold text-white'>Status</h2>
-                            {/* <span>Total <span className='text-blue-300 font-bold'>{sendingMessage?.length}</span> Address found!</span> */}
-                            <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 px-20 text-center">
+                            <div className="flex flex-col space-y-5 items-center justify-center w-full flex-1 md:px-20 px-8 text-center">
                                 {sendingMessage.map((elem: any, index: number) => (
-                                    <div key={index} className="flex space-x-5 items-center justify-center w-full flex-1 px-20 text-center">
-                                        <span className='text-white font-bold'>{elem}</span>
+                                    <div key={index} className="flex space-x-5 items-center justify-center w-full flex-1 px-0 md:px-20 text-center">
+                                        <span className='text-white font-bold md:hidden block'>{shortAddress(elem)}</span>
+                                        <span className='text-white font-bold md:block hidden'>{elem}</span>
                                         <span className='text-green-100 text-sm px-3 py-1 rounded-full bg-green-600'>Sent</span>
                                     </div>
                                 ))}
