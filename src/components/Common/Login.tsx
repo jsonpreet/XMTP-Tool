@@ -9,7 +9,7 @@ const Login:FC = () => {
     const setIsLoggedIn = useXmtpStore(state => state.setIsLoggedIn)
     const isLoggedIn = useXmtpStore(state => state.isLoggedIn)
     const setUser = useXmtpStore(state => state.setUser)
-    const { address, isConnected } = useAccount()
+    const { address, isConnected, isConnecting } = useAccount()
     
     const { connect } = useConnect({
         connector: new InjectedConnector(),
@@ -51,10 +51,19 @@ const Login:FC = () => {
         <>
             <div className="w-full h-screen flex flex-col items-center justify-center">
                 <div>
+                    <h3 className="text-3xl flex flex-col space-y-2 text-center items-center justify-center font-semibold mb-10">
+                        <span>Send <span className="bg-gradient-to-r bg-clip-text  text-transparent  from-indigo-500 via-purple-500 to-indigo-500 animate-text">Message</span> to</span> 
+                        <span className="flex space-x-2">
+                            <span className="bg-gradient-to-r bg-clip-text  text-transparent  from-indigo-500 via-purple-500 to-indigo-500 animate-text">Bulk</span> 
+                            <span>Recipients</span>
+                        </span>
+                    </h3>
+                </div>
+                <div>
                     {isLoggedIn ? 
                 
                         <button
-                            className="px-10 py-3 rounded-full bg-purple-600 text-white"
+                            className="px-6 py-2 rounded-full bg-orange-600 text-white"
                             onClick={() => {
                                 disconnect()
                             }}
@@ -64,12 +73,12 @@ const Login:FC = () => {
                         : 
                         <button
                             
-                            className="px-10 py-3 rounded-full bg-purple-600 text-white hover:bg-purple-700"
+                            className="px-6 py-2 rounded-full bg-orange-600 text-white hover:bg-orange-700"
                             onClick={() => {
                                 connect()
                             }}
                         >
-                            Connect Wallet
+                            {isConnecting ? `Connecting` : `Connect Wallet`}
                         </button>
                     }
                 </div>

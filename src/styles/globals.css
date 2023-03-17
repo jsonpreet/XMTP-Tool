@@ -4,6 +4,14 @@
 @import '@rainbow-me/rainbowkit/styles.css';
 
 body {
-    background-color: #121212;
+    background-color: rgb(0 3 19);
     color: #fff;
+}
+
+.theme-border {
+    border-color: rgb(32 34 56)!important;
+}
+
+.theme-bg {
+	background-color: #11142e;
 }
